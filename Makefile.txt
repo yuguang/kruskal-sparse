@@ -1,0 +1,13 @@
+CC= gcc
+CFLAGS=  -O3 -g -Wall -pedantic
+
+KRUSKALOBJS= kruskal_hw.o util.o
+
+krusal: $(KRUSKALOBJS)
+	  $(CC) $(CFLAGS) -o kruskal $(KRUSKALOBJS) -lm
+
+clean:
+	rm -f *.o kruskal
+
+kruskal_hw.o: kruskal_hw.c util.h
+util.o: util.c util.h
