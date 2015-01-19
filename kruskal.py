@@ -1,3 +1,5 @@
+import sys
+
 def find(component, u):
     if not u in component:
         return u
@@ -22,15 +24,21 @@ def kruskal(edges, component, rank):
             combine(component, rank, u, v)
     return tree
 
-with open('g10.22.edg', 'r') as f:
-    (num_edges, num_vertices) = [int(item) for item in f.readline().split(' ')]
-    next(f)
-    component = {}
-    edges = []
-    for line in f:
-        (u, v, weight) = [int(item) for item in line.split(' ')]
-        component[u] = u
-        component[v] = v
-        edges.append((weight, u, v))
-    rank = {u: 0 for u in range(0, num_edges)}
-    print kruskal(edges, component, rank)
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        sys.stderr.write("Usage : python %s inputfile\n" % sys.argv[0])
+        raise SystemExit(1)
+    inputfile = sys.argv[1]
+    with open(inputfile, 'r') as f:
+        (num_edges, num_vertices) = [int(item) for item in f.readline().split(' ')]
+        next(f)
+        component = {}
+        edges = []
+        for line in f:
+            (u, v, weight) = [int(item) for item in line.split(' ')]
+            component[u] = u
+            component[v] = v
+            edges.append((weight, u, v))
+        rank = {u: 0 for u in range(0, num_edges)}
+        print kruskal(edges, component, rank)
+
