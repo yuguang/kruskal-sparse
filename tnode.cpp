@@ -1,6 +1,9 @@
 #include "tnode.h"
 
-tnode::tnode(int name) {
+tnode::tnode() {
+}
+
+void tnode::init(int name) {
   this->rank = 0;
   this->name = name;
   this->parent = this;
@@ -10,13 +13,14 @@ tnode::~tnode() {
 }
 
 void tnode::join(tnode * node) {
-  if (rank > node->rank) {
-    node->parent = this;
+  tnode *this_p = this->find(), *node_p = node->find();
+  if (this_p->rank > node_p->rank) {
+    node_p->parent = this;
   } else {
-    parent = node;
+    this_p->parent = node_p;
   }
-  if (this->rank == node->rank) {
-    node->rank++;
+  if (this_p->rank == node_p->rank) {
+    node_p->rank++;
   }
 }
 

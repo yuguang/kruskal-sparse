@@ -8,9 +8,9 @@ class tnode {
                 tnode * parent;
                 tnode * find();
 
-		tnode();
 	public:
-		tnode(int name);
+		tnode();
+		void init(int name);
 		~tnode();
                 int find_label();
                 void join(tnode * node);
