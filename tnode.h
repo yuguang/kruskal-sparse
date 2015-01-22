@@ -5,13 +5,15 @@ class tnode {
 	private:
 		int rank;
 		int name;
-		tnode * find_label();
-		void join(tnode * node);
+                tnode * parent;
+                tnode * find();
 
 		tnode();
 	public:
 		tnode(int name);
 		~tnode();
+                int find_label();
+                void join(tnode * node);
 };
 
 #endif
