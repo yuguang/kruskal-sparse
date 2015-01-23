@@ -55,6 +55,24 @@ int main(int argc, const char * argv[]) {
 	// Sort edges by weight
 	std::sort(edges.begin(), edges.end(), edgePtrCompare);
 
+	std::vector<edge *> tree = std::vector<edge *>();
+	int tree_cost = 0;
+	
+	for( int i = 0; i < n_edges; i++ ) {
+		if( nodes[edges[i]->end1].find_label() != nodes[edges[i]->end2].find_label() ) {
+			tree.push_back(edges[i]);
+			tree_cost += edges[i]->weight;
+			nodes[edges[i]->end1].join(&(nodes[edges[i]->end2]));
+		}	
+	}
+
+/* Print edges in tree
+	for( int i = 0; i < n_nodes-1; i++ ) {
+		std::cout << tree[i]->end1 << " " << tree[i]->end2 << std::endl;
+	}
+*/
+	std::cout << "Tree cost: " << tree_cost << std::endl;
+
 /* Some debug prints
 	for( int i = 0; i < n_edges; i++ ) {
 		std::cout << edges[i]->end1 << " "  << edges[i]->end2 << " " << edges[i]->weight << std::endl;
