@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include "util.h"
 
 class edge {
 	public:
@@ -26,6 +27,7 @@ bool edgePtrCompare(const edge *l, const edge *r) {
 
 int main(int argc, const char * argv[]) {
 	int n_nodes, n_edges;
+	double start = CO759_zeit(), done_read, done_tree, done_free;
 
 	if( argc < 2 ) {
 		std::cout << "Must include path to graph data" << std::endl;
@@ -52,11 +54,13 @@ int main(int argc, const char * argv[]) {
 	}
 	fin.close();
 
+	done_read = CO759_zeit();
+
 	// Sort edges by weight
 	std::sort(edges.begin(), edges.end(), edgePtrCompare);
 
 	std::vector<edge *> tree = std::vector<edge *>();
-	int tree_cost = 0;
+	unsigned long long tree_cost = 0;
 	
 	for( int i = 0; i < n_edges; i++ ) {
 		if( nodes[edges[i]->end1].find_label() != nodes[edges[i]->end2].find_label() ) {
@@ -64,14 +68,18 @@ int main(int argc, const char * argv[]) {
 			tree_cost += edges[i]->weight;
 			nodes[edges[i]->end1].join(&(nodes[edges[i]->end2]));
 		}	
+		if( tree.size() == n_nodes-1 ) {
+			break;
+		}
 	}
+
+	done_tree = CO759_zeit();
 
 /* Print edges in tree
 	for( int i = 0; i < n_nodes-1; i++ ) {
 		std::cout << tree[i]->end1 << " " << tree[i]->end2 << std::endl;
 	}
 */
-	std::cout << "Tree cost: " << tree_cost << std::endl;
 
 /* Some debug prints
 	for( int i = 0; i < n_edges; i++ ) {
@@ -94,4 +102,11 @@ int main(int argc, const char * argv[]) {
 	for( int i = 0; i < n_edges; i++ ) {
 		delete edges[i];
 	}
+	done_free = CO759_zeit();
+
+	std::cout << "Tree cost: " << tree_cost << std::endl;
+	std::cout << "Read Input: " << done_read - start << "s" << std::endl;
+	std::cout << "Build Tree: " << done_tree - done_read << "s" << std::endl;
+	std::cout << "Free memory: " << done_free - done_tree << "s" << std::endl;
+
 }
