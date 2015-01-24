@@ -27,7 +27,7 @@ bool edgePtrCompare(const edge *l, const edge *r) {
 
 int main(int argc, const char * argv[]) {
 	int n_nodes, n_edges;
-	double start = CO759_zeit(), done_read, done_tree, done_free;
+	double start = CO759_zeit(), done_read, done_tree, done_free, done_sort;
 
 	if( argc < 2 ) {
 		std::cout << "Must include path to graph data" << std::endl;
@@ -58,6 +58,7 @@ int main(int argc, const char * argv[]) {
 
 	// Sort edges by weight
 	std::sort(edges.begin(), edges.end(), edgePtrCompare);
+	done_sort = CO759_zeit();
 
 	std::vector<edge *> tree = std::vector<edge *>();
 	unsigned long long tree_cost = 0;
@@ -106,7 +107,8 @@ int main(int argc, const char * argv[]) {
 
 	std::cout << "Tree cost: " << tree_cost << std::endl;
 	std::cout << "Read Input: " << done_read - start << "s" << std::endl;
-	std::cout << "Build Tree: " << done_tree - done_read << "s" << std::endl;
+	std::cout << "Sort Edges: " << done_sort - done_read << "s" << std::endl;
+	std::cout << "Build Tree: " << done_tree - done_sort << "s" << std::endl;
 	std::cout << "Free memory: " << done_free - done_tree << "s" << std::endl;
 
 }
