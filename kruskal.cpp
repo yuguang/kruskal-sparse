@@ -21,10 +21,6 @@ bool operator<(const edge & l, const edge & r) {
 	return l.weight < r.weight;
 }
 
-bool edgePtrCompare(const edge *l, const edge *r) {
-	return *l < *r;
-}
-
 int main(int argc, const char * argv[]) {
 	int n_nodes, n_edges;
 	double start = CO759_zeit(), done_read, done_tree, done_free, done_sort;
@@ -41,7 +37,8 @@ int main(int argc, const char * argv[]) {
 
 	// Allocate memory
 	tnode *nodes = new tnode[n_nodes];
-	std::vector<edge *> edges = std::vector<edge *>();
+	std::vector<edge> edges;
+	edges.reserve(n_edges);
 
 	// Initialize nodes
 	for( int i = 0; i < n_nodes; i++ ) nodes[i].init(i);
@@ -50,24 +47,25 @@ int main(int argc, const char * argv[]) {
 	int end1_t, end2_t, weight_t;
 	for( int i = 0; i < n_edges; i++ ) {
 		fin >> end1_t >> end2_t >> weight_t;
-		edges.push_back(new edge(end1_t, end2_t, weight_t));	
+		edges.push_back(edge(end1_t, end2_t, weight_t));
 	}
 	fin.close();
 
 	done_read = CO759_zeit();
 
 	// Sort edges by weight
-	std::sort(edges.begin(), edges.end(), edgePtrCompare);
+	std::sort(edges.begin(), edges.end());
 	done_sort = CO759_zeit();
 
-	std::vector<edge *> tree = std::vector<edge *>();
+	std::vector<edge> tree;
+	tree.reserve(n_nodes-1);
 	unsigned long long tree_cost = 0;
 	
 	for( int i = 0; i < n_edges; i++ ) {
-		if( nodes[edges[i]->end1].find_label() != nodes[edges[i]->end2].find_label() ) {
+		if( nodes[edges[i].end1].find_label() != nodes[edges[i].end2].find_label() ) {
 			tree.push_back(edges[i]);
-			tree_cost += edges[i]->weight;
-			nodes[edges[i]->end1].join(&(nodes[edges[i]->end2]));
+			tree_cost += edges[i].weight;
+			nodes[edges[i].end1].join(&(nodes[edges[i].end2]));
 		}	
 		if( tree.size() == n_nodes-1 ) {
 			break;
@@ -100,9 +98,6 @@ int main(int argc, const char * argv[]) {
 
 	// Free nodes and edges
 	delete [] nodes;
-	for( int i = 0; i < n_edges; i++ ) {
-		delete edges[i];
-	}
 	done_free = CO759_zeit();
 
 	std::cout << "Tree cost: " << tree_cost << std::endl;
